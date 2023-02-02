@@ -1,0 +1,287 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.hidden {
+	display: none;
+}
+
+body {
+	padding: 40px 100px;
+	font-family: 'Lato', sans-serif;
+}
+
+header {
+	width: 260px;
+	margin: 30px auto 20px auto;
+}
+
+header img {
+	width: 100%;
+}
+
+#search {
+	display: flex;
+	align-items: center;
+	height: 70px;
+	padding: 0 25px;
+	border-radius: 5px;
+	background-color: #E7E7E7;
+	font-size: 18px;
+}
+
+#search input {
+	flex: 1;
+	font-size: 18px;
+	background-color: #E7E7E7;
+	border: none;
+	outline: none;
+}
+
+#search i {
+	font-size: 32px;
+	cursor: pointer;
+}
+
+#tags {
+	color: #FFFFFF;
+	font-weight: 700;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin: 25px 0 15px;
+}
+
+.tag {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.tag span {
+	margin-right: 12px;
+	font-size: 14px;
+}
+
+.tag i {
+	font-size: 20px;
+	cursor: pointer;
+}
+
+#filters {
+	color: #FFFFFF;
+	display: flex;
+	column-gap: 20px;
+}
+
+.ingredients {
+	background-color: #3282F7;
+	cursor: pointer
+}
+
+.appliances {
+	background-color: #68D9A4;
+	cursor: pointer
+}
+
+.ustensils {
+	background-color: #ED6454;
+	cursor: pointer
+}
+
+#filters #ingredients, #filters #appliances, #filters #ustensils {
+	padding: 25px 15px;
+	border-radius: 5px;
+}
+
+#filters span {
+	font-size: 18px;
+	font-weight: 700;
+	margin-right: 30px;
+}
+
+#filters>div {
+	position: relative;
+}
+
+#filters>div>div>div>div::first-letter {
+	text-transform: capitalize;
+}
+
+#filters .input {
+	position: absolute;
+	top: 0;
+	z-index: 1;
+	border-radius: 5px;
+}
+
+#filters .input .search {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#filters .input .search * {
+	padding: 20px;
+}
+
+#filters .input input {
+	width: 100%;
+	font-size: 18px;
+	font-weight: 700;
+	padding: 15px 10px;
+	border: none;
+	outline: none;
+	background-color: inherit;
+	color: #FFFFFF;
+}
+
+#filters .input input::placeholder {
+	font-size: 18px;
+	font-weight: 700;
+	color: #FFFFFF;
+	opacity: 0.5;
+}
+
+
+#filters .input .list {
+	display: grid;
+	padding: 0 20px 20px 20px;
+	border-radius: 5px;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px 100px;
+}
+
+#filters .input .list div {
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+#recipes {
+	margin-top: 25px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 50px;
+}
+
+.recipe {
+	border-radius: 5px;
+	background-color: #E7E7E7;
+}
+
+.recipe .recipe_img {
+	height: 180px;
+	background-color: #C7BEBE;
+	border-radius: 5px 5px 0 0;
+}
+
+.recipe .recipe_content {
+	padding: 20px;
+}
+
+.recipe .recipe_header {
+	margin-bottom: 25px;
+	font-size: 18px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	column-gap: 10px;
+}
+
+.recipe h2 {
+	font-size: 18px;
+	font-weight: 400;
+}
+
+.time {
+	font-weight: 700;
+}
+
+.time i {
+	padding-right: 5px;
+	font-size: 20px;
+}
+
+.recipe .recipe_body {
+	display: flex;
+	justify-content: space-between;
+	column-gap: 10px;
+}
+
+.recipe .recipe_body * {
+	flex: 1;
+}
+
+.recipe_body>div:first-child {
+	display: -webkit-box;
+	-webkit-line-clamp: 5;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.recipe .ingredients {
+	font-size: 12px;
+	background-color: transparent;
+}
+
+.recipe .ingredients span:first-child {
+	font-weight: 700;
+}
+
+.description {
+	font-family: 'Roboto';
+	font-size: 12px;
+	display: -webkit-box;
+	-webkit-line-clamp: 5;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+#error_message {
+	width: 100%;
+	text-align: center;
+	color: #D04F4F;
+	font-size: 30px;
+	font-weight: 700;
+	margin-top: 40px;
+}
+
+@media screen and (max-width: 992px) {
+	body {
+		padding: 40px;
+	}
+
+	#recipes {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+	}
+
+	#filters {
+		flex-direction: column;
+		gap: 10px;
+	}
+	#filters .input {
+		width: 100%;
+	}
+	#filters .input .list {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width: 768px) {
+	body {
+		padding: 20px;
+	}
+
+	#recipes {
+		grid-template-columns: none;
+	}
+	#filters .input .list {
+		grid-template-columns: 1fr;
+	}
+}
