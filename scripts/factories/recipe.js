@@ -42,23 +42,20 @@ class Recipe {
     article.classList.add('recipe')
     const ingredientsList = document.createElement('div')
 
-    for (let i = 0; i < this.ingredients.length; i++) {
+    this.ingredients.forEach((ingr) => {
       ingredientsList.innerHTML += `
       <div class="ingredients">
-         <span>${this.ingredients[i].ingredient}</span>
+         <span>${ingr.ingredient}</span>
          <span>${
-           !this.ingredients[i].quantity
+           !ingr.quantity
              ? ''
-             : this.ingredients[i].unit
-             ? ': ' +
-               this.ingredients[i].quantity +
-               ' ' +
-               this.ingredients[i].unit
-             : ': ' + this.ingredients[i].quantity
+             : ingr.unit
+             ? ': ' + ingr.quantity + ' ' + ingr.unit
+             : ': ' + ingr.quantity
          }</span>
       </div>
-      `
-    }
+             `
+    })
     const recipeHours = Math.floor(this.time / 60)
     const recipeMinutes = this.time % 60
 

@@ -54,7 +54,7 @@ const filterRecipesWithSearchbar = async () => {
       descriptionMatch = true
     }
     if (nameMatch || ingredientMatch || descriptionMatch) {
-      filteredRecipes.push(recipe)
+      filteredRecipes[filteredRecipes.length] = recipe
     }
   }
 }
@@ -68,82 +68,31 @@ const filterRecipesWithTags = () => {
   const selectedAppliances = selectedTags.appliances
   const selectedUstensils = selectedTags.ustensils
 
-  const RecipesArray = []
-
-  for (let i = 0; i < filteredRecipes.length; i++) {
-    const recipe = filteredRecipes[i]
-    const ingredients = recipe.ingredients
-    const appliances = [recipe.appliance]
-    const ustensils = recipe.ustensils
-
-    // check if all selected ingredients are in the recipe
-    let hasSelectedIngredients = true
-    for (let j = 0; j < selectedIngredients.length; j++) {
-      const selectedIngredient = selectedIngredients[j]
-      let hasIngredient = false
-      for (let k = 0; k < ingredients.length; k++) {
-        const ingredient = ingredients[k]
-        if (
-          ingredient.ingredient.toLowerCase() ===
-          selectedIngredient.toLowerCase()
-        ) {
-          hasIngredient = true
-          break
-        }
-      }
-      if (!hasIngredient) {
-        hasSelectedIngredients = false
-        break
-      }
-    }
-
-    // check if all selected appliances are in the recipe
-    let hasSelectedAppliances = true
-    for (let j = 0; j < selectedAppliances.length; j++) {
-      const selectedAppliance = selectedAppliances[j]
-      let hasAppliance = false
-      for (let k = 0; k < appliances.length; k++) {
-        const appliance = appliances[k]
-        if (appliance.toLowerCase() === selectedAppliance.toLowerCase()) {
-          hasAppliance = true
-          break
-        }
-      }
-      if (!hasAppliance) {
-        hasSelectedAppliances = false
-        break
-      }
-    }
-
-    // check if all selected ustensils are in the recipe
-    let hasSelectedUstensils = true
-    for (let j = 0; j < selectedUstensils.length; j++) {
-      const selectedUstensil = selectedUstensils[j]
-      let hasUstensil = false
-      for (let k = 0; k < ustensils.length; k++) {
-        const ustensil = ustensils[k].toLowerCase()
-        if (ustensil === selectedUstensil.toLowerCase()) {
-          hasUstensil = true
-          break
-        }
-      }
-      if (!hasUstensil) {
-        hasSelectedUstensils = false
-        break
-      }
-    }
-
-    // if the recipe has all the selected ingredients, appliances and ustensils, add it to the results
-    if (
-      hasSelectedIngredients &&
-      hasSelectedAppliances &&
-      hasSelectedUstensils
-    ) {
-      RecipesArray.push(recipe)
-    }
+  if (
+    !selectedIngredients.length &&
+    !selectedAppliances.length &&
+    !selectedUstensils.length
+  ) {
+    return displayRecipes()
+  } else {
+    filteredRecipes = filteredRecipes.filter(
+      (recipe) =>
+        (!selectedIngredients.length ||
+          selectedIngredients.every((selectedIngredient) =>
+            recipe.ingredients
+              .map((ingr) => ingr.ingredient.toLowerCase())
+              .includes(selectedIngredient)
+          )) &&
+        (!selectedAppliances.length ||
+          selectedAppliances.includes(recipe.appliance.toLowerCase())) &&
+        (!selectedUstensils.length ||
+          selectedUstensils.every((selectedUstensil) =>
+            recipe.ustensils
+              .map((ust) => ust.toLowerCase())
+              .includes(selectedUstensil)
+          ))
+    )
   }
-
-  filteredRecipes = RecipesArray
 }
 
 /**
@@ -168,19 +117,19 @@ const displayRecipes = () => {
   }
 
   // render the recipes components
-  for (let i = 0; i < filteredRecipes.length; i++) {
+  filteredRecipes.forEach((recipe) => {
     const newRecipe = new Recipe(
-      filteredRecipes[i].id,
-      filteredRecipes[i].name,
-      filteredRecipes[i].servings,
-      filteredRecipes[i].ingredients,
-      filteredRecipes[i].time,
-      filteredRecipes[i].description,
-      filteredRecipes[i].appliance,
-      filteredRecipes[i].ustensils
+      recipe.id,
+      recipe.name,
+      recipe.servings,
+      recipe.ingredients,
+      recipe.time,
+      recipe.description,
+      recipe.appliance,
+      recipe.ustensils
     )
     recipes.appendChild(newRecipe.createRecipe())
-  }
+  })
 
   // update displayed tags
   updateLists()
@@ -192,37 +141,27 @@ const displayRecipes = () => {
  */
 const updateLists = () => {
   // retrieve ingredients from all remaining (filtered) recipes
-  let ingredientsArray = new Array(filteredRecipes.length)
-  for (let i = 0; i < filteredRecipes.length; ++i) {
-    ingredientsArray[i] = filteredRecipes[i].ingredients
-  }
-  let ingredientsOptions = new Array(ingredientsArray.length)
-  for (let i = 0; i < ingredientsArray.length; ++i) {
-    ingredientsOptions[i] = ingredientsArray[i][0].ingredient.toLowerCase()
-  }
-  ingredientsOptions.sort((a, b) => a.localeCompare(b))
+  let ingredientsOptions = filteredRecipes.map((recipe) => recipe.ingredients)
+
+  ingredientsOptions = ingredientsOptions
+    .map(([{ ingredient }]) => ingredient.toLowerCase())
+    .sort((a, b) => a.localeCompare(b))
+
   // remove duplicated ingredients
   ingredientsOptions = [...new Set(ingredientsOptions)]
 
   // retrieve appliances from all remaining (filtered) recipes
-  let appliancesOptions = new Array(filteredRecipes.length)
-  for (let i = 0; i < filteredRecipes.length; ++i) {
-    appliancesOptions[i] = filteredRecipes[i].appliance.toLowerCase()
-  }
-  appliancesOptions.sort((a, b) => a.localeCompare(b))
+  let appliancesOptions = filteredRecipes
+    .map((recipe) => recipe.appliance.toLowerCase())
+    .sort((a, b) => a.localeCompare(b))
   // remove duplicated appliances
   appliancesOptions = [...new Set(appliancesOptions)]
 
-  // retrieve ustensils dients from all remaining (filtered) recipes
-  let ustensilsArray = new Array(filteredRecipes.length)
-  for (let i = 0; i < filteredRecipes.length; ++i) {
-    ustensilsArray[i] = filteredRecipes[i].ustensils
-  }
-  let ustensilsOptions = new Array(ustensilsArray.length)
-  for (let i = 0; i < ustensilsArray.length; ++i) {
-    ustensilsOptions[i] = ustensilsArray[i][0].toLowerCase()
-  }
-  ustensilsOptions.sort((a, b) => a.localeCompare(b))
+  // retrieve ustensils from all remaining (filtered) recipes
+  let ustensilsOptions = filteredRecipes.map((recipe) => recipe.ustensils)
+  ustensilsOptions = ustensilsOptions
+    .map(([ustensil]) => ustensil.toLowerCase())
+    .sort((a, b) => a.localeCompare(b))
   // remove duplicated ustensils
   ustensilsOptions = [...new Set(ustensilsOptions)]
 
@@ -231,60 +170,60 @@ const updateLists = () => {
     .querySelector('.search input')
     .value.toLowerCase()
   ingredientsList.innerHTML = ''
-  for (let i = 0; i < ingredientsOptions.length; i++) {
+  ingredientsOptions.forEach((ingredient) => {
     if (
-      ingredientsOptions[i].toLowerCase().includes(ingredientsSearch) ||
+      ingredient.toLowerCase().includes(ingredientsSearch) ||
       !ingredientsSearch.length
     ) {
       const ingredientElement = document.createElement('div')
-      ingredientElement.textContent = ingredientsOptions[i]
+      ingredientElement.textContent = ingredient
       ingredientElement.addEventListener('click', () => {
-        !selectedTags.ingredients.includes(ingredientsOptions[i]) &&
-          createTag('ingredients', ingredientsOptions[i])
+        !selectedTags.ingredients.includes(ingredient) &&
+          createTag('ingredients', ingredient)
       })
       ingredientsList.appendChild(ingredientElement)
     }
-  }
+  })
 
   // display remaining appliances inside the dropdown list
   const appliancesSearch = appliancesMenuDropdown
     .querySelector('.search input')
     .value.toLowerCase()
   appliancesList.innerHTML = ''
-  for (let i = 0; i < appliancesOptions.length; i++) {
+  appliancesOptions.forEach((appliance) => {
     if (
-      appliancesOptions[i].toLowerCase().includes(appliancesSearch) ||
+      appliance.toLowerCase().includes(appliancesSearch) ||
       !appliancesSearch.length
     ) {
       const applianceElement = document.createElement('div')
-      applianceElement.textContent = appliancesOptions[i]
+      applianceElement.textContent = appliance
       applianceElement.addEventListener('click', () => {
-        !selectedTags.appliances.includes(appliancesOptions[i]) &&
-          createTag('appliances', appliancesOptions[i])
+        !selectedTags.appliances.includes(appliance) &&
+          createTag('appliances', appliance)
       })
       appliancesList.appendChild(applianceElement)
     }
-  }
+  })
 
   // display remaining ustensils inside the dropdown list
   const ustensilsSearch = ustensilsMenuDropdown
     .querySelector('.search input')
     .value.toLowerCase()
   ustensilsList.innerHTML = ''
-  for (let i = 0; i < ustensilsOptions.length; i++) {
+  ustensilsOptions.forEach((ustensil) => {
     if (
-      ustensilsOptions[i].toLowerCase().includes(ustensilsSearch) ||
+      ustensil.toLowerCase().includes(ustensilsSearch) ||
       !ustensilsSearch.length
     ) {
       const ustensilElement = document.createElement('div')
-      ustensilElement.textContent = ustensilsOptions[i]
+      ustensilElement.textContent = ustensil
       ustensilElement.addEventListener('click', () => {
-        !selectedTags.ustensils.includes(ustensilsOptions[i]) &&
-          createTag('ustensils', ustensilsOptions[i])
+        !selectedTags.ustensils.includes(ustensil) &&
+          createTag('ustensils', ustensil)
       })
       ustensilsList.appendChild(ustensilElement)
     }
-  }
+  })
 }
 
 /**
@@ -327,10 +266,9 @@ const init = () => {
     document.querySelector('#appliancesMenu'),
     document.querySelector('#ustensilsMenu'),
   ]
-
-  for (let i = 0; i < menus.length; i++) {
-    menus[i].addEventListener('click', (e) => {
-      const dropdownMenu = eval(menus[i].id + 'Dropdown')
+  menus.forEach((menu) => {
+    menu.addEventListener('click', (e) => {
+      const dropdownMenu = eval(menu.id + 'Dropdown')
       if (dropdownMenu.classList.contains('hidden')) {
         dropdownMenu.classList.remove('hidden')
       } else if (e.target.tagName !== 'INPUT') {
@@ -339,13 +277,13 @@ const init = () => {
       }
       // close the menu when clicked outside of it
       document.addEventListener('mouseup', function (e) {
-        if (!menus[i].contains(e.target)) {
+        if (!menu.contains(e.target)) {
           dropdownMenu.classList.add('hidden')
           dropdownMenu.querySelector('.search input').value = ''
         }
       })
     })
-  }
+  })
 
   searchRecipes()
 }
