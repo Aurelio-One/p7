@@ -198,6 +198,8 @@ header img {
 
 .time {
 	font-weight: 700;
+    min-width: 105px;
+    text-align: right;
 }
 
 .time i {

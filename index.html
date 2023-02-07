@@ -6,14 +6,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="icon" href="assets/img/favicon.ico">
     <title>Les petits plats</title>
 </head>
 
 <body>
+    <!-- HEADER SECTION-->
+    <header>
+        <h1><img src="assets/img/logo_lespetitsplats.png" alt="Logo des petits plats"></h1>
+    </header>
+    <!-- MAIN SECTION-->
+    <main>
+        <!-- SEARCH SECTION-->
+        <div id="search">
+            <input id="searchbar" type="text" name="searchbar" placeholder="Rechercher une recette">
+            <i id="searchicon" class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <!-- TAGS SECTION-->
+        <div id="tags"></div>
+        <!-- FILTERS SECTION-->
+        <div id="filters">
+            <div id="ingredientsMenu">
+                <div id="ingredients" class="ingredients">
+                    <span>Ingrédients</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="ingredientsMenuDropdown" class="ingredients input hidden">
+                    <div class="search">
+                        <input name="ingredient" type="text" placeholder="Rechercher un ingrédient">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </div>
+                    <div id="ingredientsList" class="list"></div>
+                </div>
+            </div>
+            <div id="appliancesMenu">
+                <div id="appliances" class="appliances">
+                    <span>Appareils</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="appliancesMenuDropdown" class="appliances input hidden">
+                    <div class="search">
+                        <input name="appliance" type="text" placeholder="Rechercher un appareil">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </div>
+                    <div id="appliancesList" class="list"></div>
+                </div>
+            </div>
+            <div id="ustensilsMenu">
+                <div id="ustensils" class="ustensils">
+                    <span>Ustensiles</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="ustensilsMenuDropdown" class="ustensils input hidden">
+                    <div class="search">
+                        <input name="ustensil" type="text" placeholder="Rechercher un ustensile">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </div>
+                    <div id="ustensilsList" class="list">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- RESULTS SECTION-->
+        <div id="recipes"></div>
+    </main>
+    <!-- ERROR MESSAGE-->
+    <div id="error_message"></div>
+    <!-- MAIN SCRIPTS -->
     <script src="scripts/main.js" type="module"></script>
+    <script src="scripts/Api.js"></script>
+    <!-- FACTORIES SCRIPTS -->
+    <script src="scripts/factories/recipe.js"></script>
+    <script src="scripts/factories/tag.js" ></script>
     <!-- FONT AWESOME KIT -->
     <script src="https://kit.fontawesome.com/6f34e379e9.js" crossorigin="anonymous"></script>
 </body>
